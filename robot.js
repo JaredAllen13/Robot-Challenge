@@ -31,8 +31,16 @@ function moveDrop(mapObject){
 /********************Applicant Functions****************************************************/
 
 
-function headToBase(mapObject){ //determins the direction to return to resouce base
-
+function moveToBase(mapObject){ //determins the direction to return to resouce base
+    
+    for (var i = 0; i < mapObject.resourceMap.length; i++){
+        for (var j = 0; j < mapObject.resourceMap[i].length; j++){
+            if (mapObject.resourceMap[i][j] === 'r'){
+                return getDirectionToDestination(j, i, mapObject.xLocation, mapObject.yLocation);
+             
+            }
+        }
+    }
 }
 
 function sampleCount(mapObject){ //verifies there are more samples out there to collect
