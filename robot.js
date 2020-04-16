@@ -105,19 +105,27 @@ function moveToSample(mapObject){ //determins the direction to the nearest sampl
 
 
 function robotMoveMain(mapObject) {
-//check robot sample count, if it is 5 head scan for resource base, if less than 5 scan for nearest resource 
-
-
-//check robot current location 
-//if at resource base and sample count > 0  return drop to dump samples if we accidentally end up on R while heading to another sample
-
-//if at sample and we are under max capactity return dig
-
-//if we are at an empty space and under capactiy return direction of closest sample
-
-//if we are at an empty space and at capactiy or if there are no samples remaining return direction of resource base
-
-
+    //check robot current location 
+    //if at resource base and sample count > 0  return drop to dump samples if we accidentally end up on R while heading to another sample
+    if (mapObject.sampleCount > 0 && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === 'r'){
+    return 'Drop'
+    }
+    //if at sample and we are under max capactity return dig
+    if (mapObject.sampleCount < 5 && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === 's'){
+    return 'Dig'
+    }
+    //check robot sample count, if it is 5 move to resource base, if less than 5 scan for nearest resource
+    if (mapObject.sampleCount === 5 && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
+    return moveToBase(mapObject)
+    }
+    //if we are at an empty space and under capactiy return direction of closest sample
+    if (mapObject.sampleCount < 5 && sampleCount(mapObject) && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
+    return moveToSample(mapObject)
+    }
+    //if we are at an empty space and at capactiy or if there are no samples remaining return direction of resource base
+    if (mapObject.sampleCount < 5 && !sampleCount(mapObject) && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
+    return moveToBase(mapObject)
+    }
 
     
 }
