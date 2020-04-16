@@ -1,26 +1,62 @@
 
 /********************Main Additional Functions***********************************************/
 function moveNorth(mapObject){
+    if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
+        mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
+    }
+    
+    mapObject.yLocation =+ 1;
+    
+    if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '-'){
+        mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*'
 
+    }
 }
          
 function moveSouth(mapObject){
+    if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
+        mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
+    }
+    mapObject.yLocation =- 1;
 
+    if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '-'){
+        mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*'
+
+    }
 }
            
 function moveEast(mapObject){
+    if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
+        mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
+    }
+    mapObject.xLocation =+ 1;
 
+    if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '-'){
+        mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*';
+
+    }
 }
            
 function moveWest(mapObject){
+    if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
+        mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
+    }
+    mapObject.xLocation =- 1;
 
+    if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '-'){
+        mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*';
+
+    }
 }
          
 function moveDig(mapObject){
+    mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
+    mapObject.sampleCount += 1;
 
 }
            
 function moveDrop(mapObject){
+    mapObject.sampleCount = 0
 
 }
 
