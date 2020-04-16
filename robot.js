@@ -88,11 +88,16 @@ function moveToSample(mapObject){ //determins the direction to the nearest sampl
         for (var j = 0; j < mapObject.resourceMap[i].length; j++){
             if (mapObject.resourceMap[i][j] === 's'){
                 currentObjectMoves = countMovesToDestination(j, i, mapObject.xLocation, mapObject.yLocation);
-                
+                if (currentObjectMoves < shortestTotalMoves){
+                    shortestTotalMoves = currentObjectMoves;
+                    shortestLocation = [j,i]
+
+                }
 
             }
         }
     }
+    return getDirectionToDestination(shortestLocation[0], shortestLocation[1], mapObject.xLocation, mapObject.yLocation)
 
 
 }
