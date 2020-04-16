@@ -36,7 +36,15 @@ function headToBase(mapObject){ //determins the direction to return to resouce b
 }
 
 function sampleCount(mapObject){ //verifies there are more samples out there to collect
-
+    var count = 0
+    for (var i = 0; i < mapObject.resourceMap.length; i++){
+        for (var j = 0; j < mapObject.resourceMap[i].length; j++){
+            if (mapObject.resourceMap[i][j] === 's'){
+                count += 1;
+            }
+        }
+    }
+    return count > 1 //returns true if there are any resources left to mine
 }
 
 function countMovesToDestination(destXCord, destYCord, startXCord, startYCord){ //counts total number of moves needed to get from start location to destination
@@ -57,13 +65,13 @@ function getDirectionToDestination(destXCord, destYCord, startXCord, startYCord)
     }
     if (destXCord - startXCord > 0){
         return "East";
-    } else if if (destXCord - startXCord < 0){
+    } else if(destXCord - startXCord < 0){
         return "West";
     }
     
 }
 
-function headToSample(mapObject){ //determins the direction to the nearest sample
+function moveToSample(mapObject){ //determins the direction to the nearest sample
     var shortestTotalMoves  = 0;
     var shortestLocation = [0,0];
     var currentObjectMoves = 0;
