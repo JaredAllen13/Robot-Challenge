@@ -42,9 +42,42 @@ function sampleCount(mapObject){ //verifies there are more samples out there to 
 function countMovesToDestination(destXCord, destYCord, startXCord, startYCord){ //counts total number of moves needed to get from start location to destination
     return (Math.abs(destXCord - startXCord) + Math.abs(destYCord - startYCord))
 }
+function getDirectionToDestination(destXCord, destYCord, startXCord, startYCord){ //gets direction needed to get from start location to destination
+    // move along x axis first then y axis 
+    if (destXCord - startXCord ===0){
+        if (destYCord - startYCord === 0){
+            return "none";
+        }
+        if (destYCord - startYCord > 0){
+            return "South";
+        }
+        if (destYCord - startYCord < 0){
+            return "North";
+        }
+    }
+    if (destXCord - startXCord > 0){
+        return "East";
+    } else if if (destXCord - startXCord < 0){
+        return "West";
+    }
+    
+}
 
 function headToSample(mapObject){ //determins the direction to the nearest sample
-    
+    var shortestTotalMoves  = 0;
+    var shortestLocation = [0,0];
+    var currentObjectMoves = 0;
+
+    for (var i = 0; i < mapObject.resourceMap.length; i++){
+        for (var j = 0; j < mapObject.resourceMap[i].length; j++){
+            if (mapObject.resourceMap[i][j] === 's'){
+                currentObjectMoves = countMovesToDestination(j, i, mapObject.xLocation, mapObject.yLocation);
+                
+
+            }
+        }
+    }
+
 
 }
 
