@@ -5,7 +5,7 @@ function moveNorth(mapObject){
         mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
     }
     
-    mapObject.yLocation =+ 1;
+    mapObject.yLocation = mapObject.yLocation - 1;
     
     if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '-'){
         mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*'
@@ -17,7 +17,8 @@ function moveSouth(mapObject){
     if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
         mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
     }
-    mapObject.yLocation =- 1;
+    mapObject.yLocation = mapObject.yLocation + 1;
+    
 
     if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '-'){
         mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*'
@@ -29,8 +30,8 @@ function moveEast(mapObject){
     if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
         mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
     }
-    mapObject.xLocation =+ 1;
-
+    mapObject.xLocation = mapObject.xLocation + 1;
+    
     if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '-'){
         mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*';
 
@@ -41,8 +42,8 @@ function moveWest(mapObject){
     if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
         mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
     }
-    mapObject.xLocation =- 1;
-
+    mapObject.xLocation = mapObject.xLocation - 1;
+    
     if (mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '-'){
         mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*';
 
@@ -50,8 +51,8 @@ function moveWest(mapObject){
 }
          
 function moveDig(mapObject){
-    mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '-';
-    mapObject.sampleCount += 1;
+    mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] = '*'
+    mapObject.sampleCount = mapObject.sampleCount + 1;
 
 }
            
@@ -88,7 +89,7 @@ function sampleCount(mapObject){ //verifies there are more samples out there to 
             }
         }
     }
-    return count > 1 //returns true if there are any resources left to mine
+    return count > 0 //returns true if there are any resources left to mine
 }
 
 function countMovesToDestination(destXCord, destYCord, startXCord, startYCord){ //counts total number of moves needed to get from start location to destination
@@ -96,34 +97,37 @@ function countMovesToDestination(destXCord, destYCord, startXCord, startYCord){ 
 }
 function getDirectionToDestination(destXCord, destYCord, startXCord, startYCord){ //gets direction needed to get from start location to destination
     // move along x axis first then y axis 
-    if (destXCord - startXCord ===0){
-        if (destYCord - startYCord === 0){
-            return "none";
-        }
-        if (destYCord - startYCord > 0){
+    //if (destXCord - startXCord ===0){
+        //if (destYCord - startYCord === 0){
+        //    return "none";
+        //}
+    if (destYCord - startYCord > 0){
             return "South";
         }
-        if (destYCord - startYCord < 0){
+    if (destYCord - startYCord < 0){
             return "North";
         }
-    }
+    
     if (destXCord - startXCord > 0){
         return "East";
-    } else if(destXCord - startXCord < 0){
+    } 
+    if (destXCord - startXCord < 0){
         return "West";
     }
     
 }
 
 function moveToSample(mapObject){ //determins the direction to the nearest sample
-    var shortestTotalMoves  = 0;
+    var shortestTotalMoves  = 1000;
     var shortestLocation = [0,0];
     var currentObjectMoves = 0;
 
     for (var i = 0; i < mapObject.resourceMap.length; i++){
         for (var j = 0; j < mapObject.resourceMap[i].length; j++){
+           // console.log("loop:" + j + "," + i)
             if (mapObject.resourceMap[i][j] === 's'){
                 currentObjectMoves = countMovesToDestination(j, i, mapObject.xLocation, mapObject.yLocation);
+                //console.log("currentObjectMoves: " + currentObjectMoves)
                 if (currentObjectMoves < shortestTotalMoves){
                     shortestTotalMoves = currentObjectMoves;
                     shortestLocation = [j,i]
@@ -133,6 +137,7 @@ function moveToSample(mapObject){ //determins the direction to the nearest sampl
             }
         }
     }
+    
     return getDirectionToDestination(shortestLocation[0], shortestLocation[1], mapObject.xLocation, mapObject.yLocation)
 
 
@@ -144,26 +149,40 @@ function robotMoveMain(mapObject) {
     //check robot current location 
     //if at resource base and sample count > 0  return drop to dump samples if we accidentally end up on R while heading to another sample
     if (mapObject.sampleCount > 0 && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === 'r'){
-    return 'Drop'
+        
+        return 'Drop'
     }
     //if at sample and we are under max capactity return dig
     if (mapObject.sampleCount < 5 && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === 's'){
-    return 'Dig'
+        
+        return 'Dig'
     }
     //check robot sample count, if it is 5 move to resource base, if less than 5 scan for nearest resource
     if (mapObject.sampleCount === 5 && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
-    return moveToBase(mapObject)
+        
+        return moveToBase(mapObject)
     }
     //if we are at an empty space and under capactiy return direction of closest sample
+
+    
     if (mapObject.sampleCount < 5 && sampleCount(mapObject) && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
-    return moveToSample(mapObject)
+       
+        return moveToSample(mapObject)
     }
     //if we are at an empty space and at capactiy or if there are no samples remaining return direction of resource base
     if (mapObject.sampleCount < 5 && !sampleCount(mapObject) && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === '*'){
-    return moveToBase(mapObject)
+       
+        return moveToBase(mapObject)
+    
     }
 
-    
+    if (mapObject.sampleCount === 0 && sampleCount(mapObject) && mapObject.resourceMap[mapObject.yLocation][mapObject.xLocation] === 'r'){
+        return moveToSample(mapObject) 
+    }
+
+    if (mapObject.sampleCount === 0 && !sampleCount(mapObject)){
+        return "Complete"
+    }
 }
 
 /********************Main Function**********************************************************/
@@ -171,7 +190,7 @@ function robotMoveMain(mapObject) {
 
 var testMap = {
     xLocation: 0, yLocation: 0,
-    botSampleCount: 0,
+    sampleCount: 0,
     numberOfLines: 10,
     resourceMap: [['*','-','-','-','-','-','s','-','-','-'], 
                   ['-','-','-','s','-','-','-','-','-','-'],
@@ -214,7 +233,13 @@ while (result !== 'Complete'){
             //successful completion  
     }
     moveCount += 1;
+    
+if (moveCount > 600){
+    
+    break
+}
 }
 
 
 console.log("congratulations your robot took " + moveCount + " moves to complete its mission!")
+console.log(testMap)
